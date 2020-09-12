@@ -10,3 +10,6 @@
 
 ## 参考
 https://www.youtube.com/watch?v=rV1rNzK7Tcs
+
+リファクタリング
+https://capibara1969.com/swiftui/
