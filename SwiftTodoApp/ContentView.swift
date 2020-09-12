@@ -12,6 +12,7 @@ struct ContentView: View {
     
     @State var newItem: String = ""
     @State var toDoList: [String] = []
+    @State var isAlert: Bool = false
     
     var body: some View {
         VStack {
@@ -19,9 +20,13 @@ struct ContentView: View {
                 TextField("テキストを入力", text: $newItem).textFieldStyle(RoundedBorderTextFieldStyle()).frame(width: 300)
 
                 Button(action: {
-                    self.toDoList.append(self.newItem)
-                    self.newItem = ""
-                    UserDefaults.standard.set(self.toDoList, forKey: "ToDoList")
+                    if self.newItem == "" {
+                        self.isAlert.toggle()
+                    } else {
+                        self.toDoList.append(self.newItem)
+                        self.newItem = ""
+                        UserDefaults.standard.set(self.toDoList, forKey: "ToDoList")
+                    }
                 }) {
                     ZStack {
                         RoundedRectangle(cornerRadius: 5).frame(width: 50, height: 30)
@@ -49,6 +54,9 @@ struct ContentView: View {
             }
             
             Spacer()
+            
+        }.alert(isPresented: self.$isAlert) {
+            Alert(title: Text("テキストを入力してください"), dismissButton: .default(Text("OK")))
         }.onAppear() {
             guard let defaultItem = UserDefaults.standard.array(forKey: "ToDoList") as? [String]
                 else{return}
