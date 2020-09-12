@@ -31,8 +31,21 @@ struct ContentView: View {
                 }
             }
             
-            List(toDoList, id: \.self) { item in
-                Text(item)
+            HStack {
+                Spacer()
+                EditButton().padding()
+            }
+            
+            List{
+                ForEach(toDoList, id: \.self) { item in
+                    Text(item)
+                }.onDelete { (index) in
+                    self.toDoList.remove(atOffsets: index)
+                    UserDefaults.standard.set(self.toDoList, forKey: "ToDoList")
+                }.onMove { (index, description) in
+                    self.toDoList.move(fromOffsets: index, toOffset: description)
+                    UserDefaults.standard.set(self.toDoList, forKey: "ToDoList")
+                }
             }
             
             Spacer()
