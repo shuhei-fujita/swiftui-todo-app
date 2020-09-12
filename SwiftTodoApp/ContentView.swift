@@ -11,7 +11,7 @@ import SwiftUI
 struct ContentView: View {
     
     @State var newItem: String = ""
-    @State var toDoList: [String] = ["apple", "orange", "note"]
+    @State var toDoList: [String] = []
     
     var body: some View {
         VStack {
@@ -21,6 +21,7 @@ struct ContentView: View {
                 Button(action: {
                     self.toDoList.append(self.newItem)
                     self.newItem = ""
+                    UserDefaults.standard.set(self.toDoList, forKey: "ToDoList")
                 }) {
                     ZStack {
                         RoundedRectangle(cornerRadius: 5).frame(width: 50, height: 30)
@@ -35,6 +36,10 @@ struct ContentView: View {
             }
             
             Spacer()
+        }.onAppear() {
+            guard let defaultItem = UserDefaults.standard.array(forKey: "ToDoList") as? [String]
+                else{return}
+            self.toDoList = defaultItem
         }
     }
 }
